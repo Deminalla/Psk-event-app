@@ -1,8 +1,7 @@
 package com.project.psk.controller;
 
-import com.project.psk.model.dto.User.UserCreateDTO;
 import com.project.psk.model.dto.User.UserInfoDTO;
-import com.project.psk.model.dto.User.UserUpdateDTO;
+import com.project.psk.model.dto.User.UserModifyDTO;
 import com.project.psk.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +21,12 @@ public class UserController {
     }
 
     @PostMapping("/newUser")
-    ResponseEntity<UserInfoDTO> createUser(@RequestBody UserCreateDTO userCreateDTO) {
-        return ResponseEntity.ok(userService.createUser(userCreateDTO));
+    ResponseEntity<UserInfoDTO> createUser(@RequestBody UserModifyDTO userModifyDTO) {
+        return ResponseEntity.ok(userService.createUser(userModifyDTO));
     }
 
     @PutMapping("/update/{userId}")
-    ResponseEntity<UserInfoDTO> updateUser(@PathVariable UUID userId, @RequestBody UserUpdateDTO userModifyDTO) {
+    ResponseEntity<UserInfoDTO> updateUser(@PathVariable UUID userId, @RequestBody UserModifyDTO userModifyDTO) {
         return ResponseEntity.ok(userService.updateUser(userId, userModifyDTO));
     }
 

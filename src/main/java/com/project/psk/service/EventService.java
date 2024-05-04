@@ -43,9 +43,9 @@ public class EventService {
     }
 
     @Transactional
-    public List<EventInfoDTO> getAllByOrganizer(UUID organizer) {
+    public List<EventInfoDTO> getAllByOrganizer(UUID organizerId) {
         return eventMapper.entityListToInfoDtoList(
-                eventRepository.findAllByOrganizerId(organizer));
+                eventRepository.findAllByOrganizerId(organizerId));
     }
 
     @Transactional
@@ -105,8 +105,14 @@ public class EventService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        eventEntity.getAttendingUsers().add(userEntity);
-        eventRepository.save(eventEntity);
+        List<UserEntity> attendingUsers = eventEntity.getAttendingUsers();
+        if(!attendingUsers.contains(userEntity)) {
+            eventEntity.getAttendingUsers().add(userEntity);
+            eventRepository.save(eventEntity);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User is already attending this event");
+        }
     }
 
     @Transactional
@@ -117,7 +123,13 @@ public class EventService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
-        eventEntity.getAttendingUsers().remove(userEntity);
-        eventRepository.save(eventEntity);
+        List<UserEntity> attendingUsers = eventEntity.getAttendingUsers();
+        if(attendingUsers.contains(userEntity)) {
+            eventEntity.getAttendingUsers().remove(userEntity);
+            eventRepository.save(eventEntity);
+        }
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User is not attending this event");
+        }
     }
 }

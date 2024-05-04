@@ -27,9 +27,9 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAll());
     }
 
-    @GetMapping("/organized/{organizer}")
-    ResponseEntity<List<EventInfoDTO>> getAllByOrganizer(@PathVariable UUID organizer) {
-        return ResponseEntity.ok(eventService.getAllByOrganizer(organizer));
+    @GetMapping("/organized/{organizerId}")
+    ResponseEntity<List<EventInfoDTO>> getAllByOrganizer(@PathVariable UUID organizerId) {
+        return ResponseEntity.ok(eventService.getAllByOrganizer(organizerId));
     }
 
     @GetMapping("/attending/{userId}")

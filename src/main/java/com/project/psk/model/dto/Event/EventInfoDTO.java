@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventInfoDTO {
+    private UUID id;
     private String title;
     private String description;
     private LocalDateTime date;

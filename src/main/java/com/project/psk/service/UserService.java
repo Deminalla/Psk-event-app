@@ -1,9 +1,8 @@
 package com.project.psk.service;
 
 import com.project.psk.mapper.UserMapper;
-import com.project.psk.model.dto.User.UserCreateDTO;
 import com.project.psk.model.dto.User.UserInfoDTO;
-import com.project.psk.model.dto.User.UserUpdateDTO;
+import com.project.psk.model.dto.User.UserModifyDTO;
 import com.project.psk.model.entity.UserEntity;
 import com.project.psk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +33,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserInfoDTO createUser(UserCreateDTO userCreateDTO) {
+    public UserInfoDTO createUser(UserModifyDTO userModifyDTO) {
         return userMapper.entityToInfoDto(
                 userRepository.save(
-                        userMapper.createDtoToEntity(userCreateDTO)));
+                        userMapper.createDtoToEntity(userModifyDTO)));
     }
 
     @Transactional
-    public UserInfoDTO updateUser(UUID userId, UserUpdateDTO updateUserDTO) {
+    public UserInfoDTO updateUser(UUID userId, UserModifyDTO updateUserDTO) {
         Optional<UserEntity> optionalFoundUser = userRepository.findById(userId);
         if(optionalFoundUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "UserNotFound");
