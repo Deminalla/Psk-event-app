@@ -2,12 +2,15 @@ package com.project.psk.controller;
 
 import com.project.psk.model.dto.Event.EventInfoDTO;
 import com.project.psk.model.dto.Event.EventModifyDTO;
+import com.project.psk.model.enums.EventCategory;
 import com.project.psk.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,5 +66,16 @@ public class EventController {
     ResponseEntity<String> removeAttendee(@PathVariable UUID eventId, @PathVariable UUID userId) {
         eventService.removeAttendee(eventId, userId);
         return ResponseEntity.ok("Attendee removed from event");
+    }
+
+    @GetMapping("/filter")
+    ResponseEntity<List<EventInfoDTO>> filterEvents(@RequestParam(required = false) EventCategory category,
+                                                    @RequestParam(required = false) String title,
+                                                    @RequestParam(required = false) LocalDate startDate,
+                                                    @RequestParam(required = false) LocalDate endDate,
+                                                    @RequestParam(required = false) BigDecimal minPrice,
+                                                    @RequestParam(required = false) BigDecimal maxPrice){
+        return ResponseEntity.ok(eventService.filterEventsByOptionalParameters(category, title, startDate, endDate,
+                minPrice, maxPrice));
     }
 }
