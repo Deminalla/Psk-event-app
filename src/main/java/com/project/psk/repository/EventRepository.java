@@ -16,7 +16,7 @@ import java.util.UUID;
 @Repository
 @ApplicationScope
 public interface EventRepository extends JpaRepository<EventEntity, UUID> {
-    List<EventEntity> findAllByOrganizerId(UUID organizer);
+    List<EventEntity> findAllByOrganizerId(UUID organizerId);
     @Query("SELECT e FROM EventEntity e JOIN e.attendingUsers u WHERE u.id = :userId")
     List<EventEntity> findAllByUser(UUID userId);
 
