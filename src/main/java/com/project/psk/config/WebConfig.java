@@ -1,4 +1,4 @@
-package com.project.psk;
+package com.project.psk.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
