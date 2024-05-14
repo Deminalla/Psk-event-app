@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,4 +47,7 @@ public class UserEntity {
 
     @ManyToMany(mappedBy = "attendingUsers")
     private List<EventEntity> attendingEvents;
+
+    @Version
+    Integer version;
 }
