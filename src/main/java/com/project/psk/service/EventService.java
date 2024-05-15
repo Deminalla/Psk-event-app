@@ -5,6 +5,7 @@ import com.project.psk.model.dto.Event.EventInfoDTO;
 import com.project.psk.model.dto.Event.EventModifyDTO;
 import com.project.psk.model.entity.EventEntity;
 import com.project.psk.model.entity.UserEntity;
+import com.project.psk.model.enums.EventCategory;
 import com.project.psk.repository.EventRepository;
 import com.project.psk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -131,5 +135,16 @@ public class EventService {
         else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User is not attending this event");
         }
+    }
+
+    @Transactional
+    public List<EventInfoDTO> filterEventsByOptionalParameters(EventCategory category, String title,
+                                                               LocalDate startDate, LocalDate endDate,
+                                                               BigDecimal minPrice, BigDecimal maxPrice){
+
+        List<EventEntity> filteredEvents = eventRepository.filterEventsByOptionalParameters(category, title,
+                startDate != null ? startDate.atStartOfDay() : null,
+                endDate != null ? endDate.atTime(LocalTime.MAX) : null, minPrice, maxPrice);
+        return eventMapper.entityListToInfoDtoList(filteredEvents);
     }
 }
