@@ -33,6 +33,16 @@ public class UserService {
     }
 
     @Transactional
+    public UserInfoDTO getByEmail(String email) {
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if(userEntity.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        return userMapper.entityToInfoDto(userEntity.get());
+    }
+
+    @Transactional
     public UserInfoDTO createUser(UserModifyDTO userModifyDTO) {
         return userMapper.entityToInfoDto(
                 userRepository.save(
