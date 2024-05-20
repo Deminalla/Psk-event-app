@@ -20,7 +20,7 @@ public class EventModifyDTO {
     private EventCategory category;
     private String location;
     private UUID organizer;
-    private byte[] imageBytes;
+    private String imageBytes;
     private BigDecimal price;
     private LocalDateTime endDate;
 }
