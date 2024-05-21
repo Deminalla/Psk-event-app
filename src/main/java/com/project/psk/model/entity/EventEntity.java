@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,4 +64,7 @@ public class EventEntity {
 
     @ManyToMany
     private List<UserEntity> attendingUsers;
+
+    @Version
+    Integer version;
 }
