@@ -1,6 +1,5 @@
 package com.project.psk.controller;
 
-import com.project.psk.model.dto.Guest.GuestModifyDTO;
 import com.project.psk.model.dto.Guest.GuestInfoDTO;
 import com.project.psk.model.entity.GuestEntity;
 import com.project.psk.service.GuestService;
@@ -39,14 +38,14 @@ public class GuestController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createGuest(@RequestBody GuestModifyDTO guestModifyDTO) {
-        guestService.createGuest(guestModifyDTO);
+    public ResponseEntity<Void> createGuest(@RequestBody GuestInfoDTO guestInfoDTO) {
+        guestService.createGuest(guestInfoDTO);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateGuest(@PathVariable UUID id, @RequestBody GuestModifyDTO guestModifyDTO) {
-        guestService.updateGuest(id, guestModifyDTO);
+    public ResponseEntity<Void> updateGuest(@PathVariable UUID id, @RequestBody GuestInfoDTO guestInfoDTO) {
+        guestService.updateGuest(id, guestInfoDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

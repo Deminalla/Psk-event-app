@@ -1,6 +1,5 @@
 package com.project.psk.service;
 
-import com.project.psk.model.dto.Guest.GuestModifyDTO;
 import com.project.psk.model.dto.Guest.GuestInfoDTO;
 import com.project.psk.model.entity.GuestEntity;
 import com.project.psk.mybatis.mapper.GuestMapper;
@@ -17,12 +16,12 @@ public class GuestService {
 
     private final GuestMapper guestMapper;
 
-    public void createGuest(GuestModifyDTO guestModifyDTO) {
+    public void createGuest(GuestInfoDTO guestInfoDTO) {
         GuestEntity guestEntity = new GuestEntity();
-        guestEntity.setId(guestModifyDTO.getId() != null ? guestModifyDTO.getId() : UUID.randomUUID());
-        guestEntity.setName(guestModifyDTO.getName());
-        guestEntity.setEmail(guestModifyDTO.getEmail());
-        guestEntity.setEventId(guestModifyDTO.getEventId());
+        guestEntity.setId(guestInfoDTO.getId() != null ? guestInfoDTO.getId() : UUID.randomUUID());
+        guestEntity.setName(guestInfoDTO.getName());
+        guestEntity.setEmail(guestInfoDTO.getEmail());
+        guestEntity.setEventId(guestInfoDTO.getEventId());
         guestMapper.insert(guestEntity);
     }
 
@@ -42,12 +41,12 @@ public class GuestService {
                 .collect(Collectors.toList());
     }
 
-    public void updateGuest(UUID id, GuestModifyDTO guestModifyDTO) {
+    public void updateGuest(UUID id, GuestInfoDTO guestInfoDTO) {
         GuestEntity guestEntity = new GuestEntity();
         guestEntity.setId(id);
-        guestEntity.setName(guestModifyDTO.getName());
-        guestEntity.setEmail(guestModifyDTO.getEmail());
-        guestEntity.setEventId(guestModifyDTO.getEventId());
+        guestEntity.setName(guestInfoDTO.getName());
+        guestEntity.setEmail(guestInfoDTO.getEmail());
+        guestEntity.setEventId(guestInfoDTO.getEventId());
         guestMapper.update(guestEntity);
     }
 
