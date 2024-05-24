@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -60,7 +61,7 @@ public class UserService {
         foundUser.setUserName(updateUserDTO.getUserName());
         foundUser.setFirstName(updateUserDTO.getFirstName());
         foundUser.setLastName(updateUserDTO.getLastName());
-        foundUser.setImageBytes(updateUserDTO.getImageBytes());
+        foundUser.setImageBytes(Base64.getDecoder().decode(updateUserDTO.getImageBytes()));
 
         return userMapper.entityToInfoDto(
                 userRepository.save(foundUser));

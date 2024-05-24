@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -94,7 +95,7 @@ public class EventService {
         foundEvent.setLocation(eventModifyDTO.getLocation());
         foundEvent.setEndDate(eventModifyDTO.getEndDate());
         foundEvent.setPrice(eventModifyDTO.getPrice());
-        foundEvent.setImageBytes(eventModifyDTO.getImageBytes());
+        foundEvent.setImageBytes(Base64.getDecoder().decode(eventModifyDTO.getImageBytes()));
         foundEvent.setTitle(eventModifyDTO.getTitle());
 
         return eventMapper.entityToInfoDto(

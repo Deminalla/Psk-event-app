@@ -13,5 +13,5 @@ public class UserModifyDTO {
     private String firstName;
     private String lastName;
     private String email;
-    private byte[] imageBytes;
+    private String imageBytes;
 }
