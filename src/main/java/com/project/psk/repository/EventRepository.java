@@ -22,15 +22,14 @@ public interface EventRepository extends JpaRepository<EventEntity, UUID> {
 
     @Query("SELECT e FROM EventEntity e WHERE " +
             "(TRUE = :#{#category == null} OR e.category = :category) " +
-            "AND (TRUE = :#{#title == null} OR e.title = :title) " +
-            "AND (TRUE = :#{#startDate == null} OR e.date >= :startDate) " +
-            "AND (TRUE = :#{#endDate == null} OR e.endDate <= :endDate) " +
+            "AND (TRUE = :#{#title == null} OR e.title LIKE %:title%) " +
+            "AND (TRUE = :#{#startDate == null} OR (e.date >= :startDate AND e.endDate <= :endDate)) " +
             "AND (TRUE = :#{#minPrice == null} OR e.price >= :minPrice)" +
             "AND (TRUE = :#{#maxPrice == null} OR e.price <= :maxPrice)")
     List<EventEntity> filterEventsByOptionalParameters(@Param("category") EventCategory category,
-                                                        @Param("title") String title,
-                                                        @Param("startDate") LocalDateTime startDate,
-                                                        @Param("endDate") LocalDateTime endDate,
-                                                        @Param("minPrice") BigDecimal minPrice,
-                                                        @Param("maxPrice") BigDecimal maxPrice);
+                                                       @Param("title") String title,
+                                                       @Param("startDate") LocalDateTime startDate,
+                                                       @Param("endDate") LocalDateTime endDate,
+                                                       @Param("minPrice") BigDecimal minPrice,
+                                                       @Param("maxPrice") BigDecimal maxPrice);
 }
