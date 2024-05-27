@@ -17,7 +17,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -60,9 +62,13 @@ public class EventService {
 
     @Transactional
     public EventInfoDTO createEvent(EventModifyDTO eventModifyDTO) {
+        if (eventModifyDTO.getDate().isAfter(eventModifyDTO.getEndDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start date cannot be after end date");
+        }
+
         EventEntity eventEntity = eventMapper.modifyDtoToEntity(eventModifyDTO);
         Optional<UserEntity> organizer = userRepository.findById(eventModifyDTO.getOrganizer());
-        if(organizer.isEmpty()) {
+        if (organizer.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Organizer not found");
         }
         eventEntity.setOrganizer(organizer.get());
@@ -73,8 +79,12 @@ public class EventService {
 
     @Transactional
     public EventInfoDTO updateEvent(UUID eventId, EventModifyDTO eventModifyDTO) {
+        if (eventModifyDTO.getDate().isAfter(eventModifyDTO.getEndDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Start date cannot be after end date");
+        }
+
         Optional<EventEntity> optionalFoundEvent = eventRepository.findById(eventId);
-        if(optionalFoundEvent.isEmpty()) {
+        if (optionalFoundEvent.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found");
         }
         EventEntity foundEvent = optionalFoundEvent.get();
@@ -85,12 +95,13 @@ public class EventService {
         foundEvent.setLocation(eventModifyDTO.getLocation());
         foundEvent.setEndDate(eventModifyDTO.getEndDate());
         foundEvent.setPrice(eventModifyDTO.getPrice());
-        foundEvent.setImageBytes(eventModifyDTO.getImageBytes());
+        foundEvent.setImageBytes(Base64.getDecoder().decode(eventModifyDTO.getImageBytes()));
         foundEvent.setTitle(eventModifyDTO.getTitle());
 
         return eventMapper.entityToInfoDto(
                 eventRepository.save(foundEvent));
     }
+
     @Transactional
     public void deleteEvent(UUID eventId) {
         Optional<EventEntity> optionalFoundEvent = eventRepository.findById(eventId);
@@ -140,11 +151,12 @@ public class EventService {
     @Transactional
     public List<EventInfoDTO> filterEventsByOptionalParameters(EventCategory category, String title,
                                                                LocalDate startDate, LocalDate endDate,
-                                                               BigDecimal minPrice, BigDecimal maxPrice){
+                                                               BigDecimal minPrice, BigDecimal maxPrice) {
 
-        List<EventEntity> filteredEvents = eventRepository.filterEventsByOptionalParameters(category, title,
-                startDate != null ? startDate.atStartOfDay() : null,
-                endDate != null ? endDate.atTime(LocalTime.MAX) : null, minPrice, maxPrice);
+        LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : null;
+        LocalDateTime endDateTime = endDate != null ? endDate.atTime(LocalTime.MAX) : null;
+
+        List<EventEntity> filteredEvents = eventRepository.filterEventsByOptionalParameters(category, title, startDateTime, endDateTime, minPrice, maxPrice);
         return eventMapper.entityListToInfoDtoList(filteredEvents);
     }
 }

@@ -7,6 +7,7 @@ import com.project.psk.model.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,18 @@ public interface EventMapper {
     default UUID map(UserEntity userEntity) {
         return userEntity.getId();
     }
-
+    default byte[] map(String base64String) {
+        if (base64String == null) {
+            return null;
+        }
+        return Base64.getDecoder().decode(base64String);
+    }
+    default String map(byte[] byteArray) {
+        if (byteArray == null) {
+            return null;
+        }
+        return Base64.getEncoder().encodeToString(byteArray);
+    }
     @Mapping(target = "organizer", ignore = true)
     EventEntity modifyDtoToEntity(EventModifyDTO eventModifyDTO);
     @Mapping(source = "organizer", target = "organizer")
