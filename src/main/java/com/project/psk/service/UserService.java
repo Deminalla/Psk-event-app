@@ -61,8 +61,9 @@ public class UserService {
         foundUser.setUserName(updateUserDTO.getUserName());
         foundUser.setFirstName(updateUserDTO.getFirstName());
         foundUser.setLastName(updateUserDTO.getLastName());
-        foundUser.setImageBytes(Base64.getDecoder().decode(updateUserDTO.getImageBytes()));
-
+        if(updateUserDTO.getImageBytes()!=null) {
+            foundUser.setImageBytes(Base64.getDecoder().decode(updateUserDTO.getImageBytes()));
+        }
         return userMapper.entityToInfoDto(
                 userRepository.save(foundUser));
     }
